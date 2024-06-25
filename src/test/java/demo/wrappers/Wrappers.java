@@ -18,12 +18,14 @@ public class Wrappers {
     private WebDriverWait wait;
 
     public Wrappers(WebDriver driver) {
+        //Initializing the driver
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(30));
     }
 
     public void searchProduct(String keyWord) {
         try {
+            //Locating the search box element
             WebElement searchBoxElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[contains(@placeholder,'Search for Products')]")));
             searchBoxElement.clear();
             searchBoxElement.sendKeys(keyWord);
@@ -47,6 +49,7 @@ public class Wrappers {
             Thread.sleep(1000);
             List<WebElement> ratings = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//div[@class='XQDdHH']")));
             int count = 0;
+            //Iterating over list of webelement
             for (WebElement e : ratings) {
                 try {
                     double rating = Double.parseDouble(e.getText());
@@ -66,6 +69,7 @@ public class Wrappers {
     public void closingLoginPopUP() {
         try {
             WebElement crossButton = driver.findElement(By.xpath("//div[@class='JFPqaw']/span"));
+            //verifying cross button is visible or not
             if(crossButton.isDisplayed() || crossButton.isEnabled()){
                 crossButton.click();
             }
@@ -77,6 +81,7 @@ public class Wrappers {
     public void printNameAndDiscount() {
         try {
             List<WebElement> discounts = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//div[@class='UkUFwK']/span")));
+            //Iterate over the list of WebElements
             for (WebElement e : discounts) {
                 String text = e.getText().replace("% off", "").trim();
                 try {
@@ -95,6 +100,7 @@ public class Wrappers {
     }
 
     public List<String> titleAndImageUrl() {
+        //Initialising the HashMap for the list of top 5 products
         HashMap<String, Integer> result = new HashMap<>();
         List<String> topFiveTitles = new ArrayList<>();
         
@@ -108,7 +114,7 @@ public class Wrappers {
                     titles = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//div[@class='slAVV4']//a[@rel='noopener noreferrer'][2]")));
                     attr = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//div[@class='slAVV4']//span[@class='Wphh3N']")));
                     
-                   
+                   //Verifying the size
                     if (titles.size() != attr.size()) {
                         System.out.println("Mismatch in size of lists, modifying to adjust");
                         int minSize = Math.min(titles.size(), attr.size());
